@@ -1,0 +1,3 @@
+(library
+  (libraries faraday)
+  (public_name answerer))
