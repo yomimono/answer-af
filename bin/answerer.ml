@@ -17,13 +17,21 @@ let rec ncat n oc s =
   | k -> output_string oc s;
     ncat (k - 1) oc s
 
+(* I know I don't need Faraday here. Shut up. You're not my mom. *)
+(* Unless you're my mom. In which case, hi mom! <3 you're right
+ * that I don't need Faraday. I love you, and I hope you
+ * were also having a good time in the world while I was writing this!
+ * Anyway neither of us did a good job of minimizing my library usage, but if
+ * anybody else cares they can fork it. *)
 let run file t answers =
   let oc = open_out file in
   let header_buf = Faraday.create 200 in
   let answer_buf = Faraday.create 52 in
   Answerer.header header_buf;
   Answerer.answer answer_buf t @@ List.map String.uppercase_ascii answers;
-  output_string oc (Faraday.serialize_to_string header_buf);
+  let header = Faraday.serialize_to_string header_buf in
+  let answer = Faraday.serialize_to_string answer_buf in
+  output_string oc header;
   ncat 1000 oc @@ Faraday.serialize_to_string answer_buf;
   flush oc;
   exit 0
