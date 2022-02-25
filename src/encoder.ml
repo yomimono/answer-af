@@ -30,7 +30,7 @@ let run file t answers =
   Answerer.Printer.header header_buf;
   Answerer.Printer.answer answer_buf t @@ List.map String.uppercase_ascii answers;
   let header = Faraday.serialize_to_string header_buf in
-  let answer = Faraday.serialize_to_string answer_buf in
+  let _answer = Faraday.serialize_to_string answer_buf in
   output_string oc header;
   ncat 1000 oc @@ Faraday.serialize_to_string answer_buf;
   flush oc;
