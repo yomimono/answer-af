@@ -1,0 +1,4 @@
+(executables
+ (public_names encoder decoder)
+ (libraries answerer cmdliner angstrom faraday)
+ )
