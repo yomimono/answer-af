@@ -1,15 +1,15 @@
 let t =
   let doc = "integer to set for the answer type. Will be forced to 0 <= i <= 255 for the given integer." in
-  Cmdliner.Arg.(value & pos 1 int 0 & info ~doc [])
+  Cmdliner.Arg.(value & pos 1 int 0 & info ~doc ~docv:"TYPE" [])
 
 let answers =
   let doc = "lines to include in the answer. For best results,
     limit to four strings, of which the first is a maximum of 12 characters and the other three a maximum of 13." in
-  Cmdliner.Arg.(value & pos_right 1 string [] & info ~doc [])
+  Cmdliner.Arg.(value & pos_right 1 string [] & info ~doc ~docv:"ANSWERS" [])
 
 let file =
   let doc = "file to write answers to. Will overwrite anything already there -- be cautious!" in
-  Cmdliner.Arg.(value & pos 0 string "./Answers.dat" & info ~doc [])
+  Cmdliner.Arg.(value & pos 0 string "./Answers.dat" & info ~doc ~docv:"FILE" [])
 
 let rec ncat n oc s =
   match n with
@@ -30,7 +30,6 @@ let run file t answers =
   Answerer.Printer.header header_buf;
   Answerer.Printer.answer answer_buf t @@ List.map String.uppercase_ascii answers;
   let header = Faraday.serialize_to_string header_buf in
-  let _answer = Faraday.serialize_to_string answer_buf in
   output_string oc header;
   ncat 1000 oc @@ Faraday.serialize_to_string answer_buf;
   flush oc;
@@ -38,4 +37,4 @@ let run file t answers =
 
 let () =
   let open Cmdliner.Term in
-  exit @@ eval @@ ((const run $ file $ t $ answers), info "answerer")
+  exit @@ eval @@ ((const run $ file $ t $ answers), info "encoder")
